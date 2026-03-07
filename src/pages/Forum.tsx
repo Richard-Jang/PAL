@@ -29,7 +29,7 @@ const MOCK_POSTS = [
   }
 ];
 
-export default function Forum() {
+export function Component() {
   useDatabase('posts');
 
   return (

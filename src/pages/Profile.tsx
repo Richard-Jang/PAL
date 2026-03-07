@@ -4,7 +4,7 @@ import { Card, CardBody, CardHeader, CardTitle } from '../util/components/Card';
 import { Button } from '../util/components/Button';
 import { useNavigate } from 'react-router-dom';
 
-export default function Profile() {
+export function Component() {
   const [user, setUser] = useState<any>(null);
   const navigate = useNavigate();
 

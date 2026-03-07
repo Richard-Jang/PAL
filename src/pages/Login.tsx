@@ -4,7 +4,7 @@ import { Button } from '../util/components/Button';
 import { Card, CardBody, CardFooter, CardHeader, CardTitle } from '../util/components/Card';
 import { useNavigate } from 'react-router-dom';
 
-export default function Auth() {
+export function Component() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);

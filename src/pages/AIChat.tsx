@@ -9,7 +9,7 @@ interface Message {
   text: string;
 }
 
-export default function AIChat() {
+export function Component() {
   const [messages, setMessages] = useState<Message[]>([
     { id: '1', sender: 'ai', text: 'Hello! What topic are you teaching me today? Or did you have a question?' }
   ]);

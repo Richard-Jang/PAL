@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Card, CardBody } from '../util/components/Card';
 
-export default function Home() {
+export function Component() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="text-center mb-12">

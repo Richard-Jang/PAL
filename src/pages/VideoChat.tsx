@@ -5,7 +5,7 @@ import { Card, CardBody, CardHeader, CardTitle } from '../util/components/Card';
 import { Whiteboard } from '../util/components/Whiteboard';
 import { FaMicrophone, FaVideo, FaPhoneSlash, FaDesktop } from 'react-icons/fa';
 
-export default function VideoChat() {
+export function Component() {
   const { initRoom, roomId, isLoading } = useVideoRoom();
   const [joined, setJoined] = useState(false);
 
