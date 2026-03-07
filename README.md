@@ -1,73 +1,58 @@
-# React + TypeScript + Vite
+# Project Name
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A forum-like hub where students can learn, communicate, teach, and collaborate with their peers.
 
-Currently, two official plugins are available:
+## Functionality
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Create profile
+  - Past classes (fetched from Nebula Labs API) and the semester taken
+  - Expected graduation year
+  - Profile picture
+  - Major and minor(s)
+  - Connection with other users
+- Video Chat
+  - built-in whiteboard
+  - export whiteboard to PDF or some other format
+  - screen share
+  - meeting notes taken by AI agent
+  - private or public with invite
+  - call has title, description, and public/private
+  - teach an AI that learns from user voice
+  - workflow: create new room -> input title, description, public/private (boolean), invites -> create room -> 
+- Forum
+  - Latex rendering support
+  - Title, tags, description (optional), participants
+  - Like, dislike, comment, view count
+  - AI generated summary of forum post
+  - mark as completed or in progress
+  - last updated timestamp
+  - reference a form post
+  - workflow: create a post (title, description, class, tags) -> ALL users can post (text and images) (more than 10 posts in a thread will be collapsed with link to fetch rest (top 5, ... x more, bottom 5)) (users can only edit messages that they post) -> thread owner mark completed
+- AI Student Chat
+  - teach an AI
+  - AI will ask users questions
+  - save chat into MongoDB
+  - workflow: student opens chat -> inputs general topic user is teaching -> AI asks broad questions that get more granular... -> AI asks if that is all -> export and end chat if complete, continue questioning otherwise
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- React Vite (frontend)
+  - React Icons
+  - framer-motion
+- Vercel (hosting hobby tier)
+- MongoDB (database)
+- Supabase (auth)
+- VideoSDK (react video caller)
 
-## Expanding the ESLint configuration
+## Development
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- API keys will be stored in a .env file:
+  - GEMINI_API_KEY: API key for Google Gemini
+- Create the following items:
+  - hooks/ (directory to store hooks)
+    - API call hooks where it memoizes or stores in a useCallback the relevant data so no repeated calls. Should return a function that has customizable components, error handling, and returns a promise of a specific type. Also make a template for this hook structure
+    - hook for creating a Video Call and generating a subsequent summary using the sound of a video and potentially whiteboard if exists
+    - hook for generating summary using the information stored in a forum object
+    - hook for storing, getting, and updating objects in MongoDB
+  - components/ (directory of all the UI components used separated into categories (cards, buttons, etc.))
+    - whiteboard component (users can draw, save, and share)
