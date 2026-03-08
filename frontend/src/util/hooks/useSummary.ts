@@ -1,22 +1,48 @@
-import { useCallback } from 'react';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useApiCall } from './useApiCall';
 
-const generateSummaryApi = async (content: string): Promise<string> => {
-  // Mock Gemini API call
-  return new Promise((resolve) => setTimeout(() => resolve(`Summary of: ${content.substring(0, 20)}...`), 1000));
-};
+const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
+/**
+ * Calls the Gemini API via SDK to summarize the given forum post and its replies
+ * in 1 to 2 short paragraphs.
+ */
+async function summarizeWithGemini(text: string): Promise<string> {
+  const prompt = `Summarize the following text in 1 to 2 short paragraphs:\n\n${text}`;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  return response.text() || 'No summary generated.';
+}
+
+/**
+ * Builds the plain-text body to send to Gemini.
+ * Includes the post title, post content, and all comments.
+ */
+export function buildPostContext(post: {
+  title: string;
+  content: string;
+  comments?: Array<{ author: string; content: string }>;
+}): string {
+  const header = `Post: ${post.title}\n\n${post.content}`;
+  const replies =
+    post.comments && post.comments.length > 0
+      ? '\n\nReplies:\n' +
+      post.comments.map((c) => `- ${c.author}: ${c.content}`).join('\n')
+      : '';
+  return header + replies;
+}
+
+/**
+ * Hook to provide Gemini summarization functionality.
+ */
 export function useSummary() {
-  const { data: summary, isLoading, error, execute } = useApiCall(generateSummaryApi);
-
-  const generate = useCallback(async (content: string) => {
-    return await execute(content);
-  }, [execute]);
+  const { isLoading, error, execute } = useApiCall<string>(summarizeWithGemini);
 
   return {
-    summary,
-    isLoading,
-    error,
-    generate,
+    isSummarizing: isLoading,
+    summaryError: error,
+    generateSummary: execute,
   };
 }

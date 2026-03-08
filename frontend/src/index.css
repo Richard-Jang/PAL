@@ -4,3 +4,16 @@ body {
   @apply bg-zinc-950 text-slate-50 font-sans;
   background-color: #ffffff;
 }
+
+.katex {
+  width: fit-content;
+}
+
+.katex {
+  margin-right: 5px;
+}
+
+.katex-html {
+  display: none;
+  width: 0px;
+}

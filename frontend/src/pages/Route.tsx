@@ -7,6 +7,7 @@ const Route: RouteObject[] = [
     { path: "/profile", lazy: () => import("./Profile"), hydrateFallbackElement: <PageSkeleton /> },
     { path: "/video", lazy: () => import("./VideoChat"), hydrateFallbackElement: <PageSkeleton /> },
     { path: "/forum", lazy: () => import("./Forum"), hydrateFallbackElement: <PageSkeleton /> },
+    { path: "/forum/:postId", lazy: () => import("./PostDetail"), hydrateFallbackElement: <PageSkeleton /> },
     { path: "/chat", lazy: () => import("./AIChat"), hydrateFallbackElement: <PageSkeleton /> },
     { path: "*", lazy: () => import("./NotFound"), hydrateFallbackElement: <PageSkeleton /> },
 ];

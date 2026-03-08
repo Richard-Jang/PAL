@@ -1,87 +1,97 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../util/lib/supabase';
 import { Card, CardBody, CardHeader, CardTitle } from '../util/components/Card';
 import { Button } from '../util/components/Button';
 import { useNavigate } from 'react-router-dom';
+import { useProfile } from '../context/ProfileContext';
+import { useAuth } from '../context/AuthContext';
+import { FaUserCircle } from 'react-icons/fa';
+import { supabase } from '../util/lib/supabase';
 
 export function Component() {
-  const [user, setUser] = useState<any>(null);
+  const { 
+    username, 
+    school, 
+    graduationYear, 
+    classes, 
+    isLoading 
+  } = useProfile();
+  const { user } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
-  }, [navigate]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate('/login');
   };
 
-  if (!user) return <div className="p-8 text-center text-purple-600 animate-pulse font-medium min-h-screen">Loading profile...</div>;
+  if (isLoading) return <div className="p-8 text-center text-purple-600 animate-pulse font-medium min-h-screen flex items-center justify-center">Loading profile...</div>;
 
   return (
-    <div className="p-8 max-w-5xl mx-auto space-y-8 min-h-[90vh]">
+    <div className="p-8 max-w-6xl mx-auto space-y-8 min-h-[90vh] bg-slate-50/50">
       <div className="flex justify-between items-center mb-8 pb-4 border-b border-purple-100">
         <h1 className="text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-fuchsia-600 tracking-tight">
           Your Profile
         </h1>
-        <Button variant="ghost" onClick={handleSignOut} className="text-red-500 hover:text-red-700 hover:bg-red-50">Sign Out</Button>
+        <Button variant="ghost" onClick={handleSignOut} className="text-red-500 hover:text-red-700 hover:bg-red-50 font-bold">Sign Out</Button>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        <Card className="xl:col-span-1 border-purple-100 shadow-purple-900/5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <Card className="lg:col-span-1 border-purple-100 shadow-xl shadow-purple-900/5 bg-white">
           <CardHeader>
-            <CardTitle>About You</CardTitle>
+            <CardTitle className="text-slate-800">About You</CardTitle>
           </CardHeader>
           <CardBody className="space-y-6">
-            <div className="relative w-32 h-32 rounded-full bg-slate-100 border-4 border-white shadow-lg mx-auto overflow-hidden ring-4 ring-purple-100">
-              <img
-                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`}
-                alt="Avatar"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="text-center">
-              <p className="text-lg font-bold text-slate-800 truncate">{user.email}</p>
-              <p className="text-sm font-medium text-purple-600 uppercase tracking-wide">Student</p>
+            <div className="flex flex-col items-center">
+              <div className="relative w-32 h-32 rounded-full bg-slate-50 border-4 border-white shadow-lg flex items-center justify-center overflow-hidden ring-4 ring-purple-100 mb-4 transition-transform hover:scale-105 duration-300">
+                <FaUserCircle className="w-full h-full text-slate-300" />
+              </div>
+              <div className="text-center w-full px-2">
+                <h2 className="text-2xl font-black text-slate-800 truncate">{username || "No Username"}</h2>
+                <p className="text-slate-500 font-medium truncate">{user?.email}</p>
+                <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-black uppercase tracking-widest border border-blue-100">
+                  Student
+                </div>
+              </div>
             </div>
 
-            <div className="pt-6 border-t border-slate-100 text-sm space-y-4">
-              <div className="flex justify-between items-center p-3 bg-blue-50/50 rounded-lg">
-                <span className="font-semibold text-slate-600">Major</span>
-                <span className="text-slate-800 font-bold">Computer Science</span>
+            <div className="pt-6 border-t border-slate-100 text-sm space-y-4 font-medium">
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <span className="block text-xs text-slate-400 uppercase tracking-widest mb-1 font-black">School</span>
+                <span className="text-slate-800 font-bold leading-tight block">{school || "No school specified"}</span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-purple-50/50 rounded-lg">
-                <span className="font-semibold text-slate-600">Graduation</span>
-                <span className="text-slate-800 font-bold">2026</span>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <span className="block text-xs text-slate-400 uppercase tracking-widest mb-1 font-black">Graduation Year</span>
+                <span className="text-slate-800 font-bold">{graduationYear || "N/A"}</span>
               </div>
             </div>
           </CardBody>
         </Card>
 
-        <Card className="xl:col-span-2 border-blue-100 shadow-blue-900/5">
+        <Card className="lg:col-span-2 border-blue-100 shadow-xl shadow-blue-900/5 bg-white">
           <CardHeader>
-            <CardTitle>Academic History</CardTitle>
+            <CardTitle className="text-slate-800 flex items-center gap-2">
+              📚 My Classes
+            </CardTitle>
           </CardHeader>
           <CardBody>
-            <p className="text-sm text-slate-500 mb-6 font-medium">Past classes retrieved from Nebula Labs API</p>
-            <ul className="space-y-4">
-              {[
-                { id: 'CS 3345', name: 'Data Structures', term: 'Fall 2024', color: 'blue' },
-                { id: 'CS 2340', name: 'Computer Architecture', term: 'Spring 2024', color: 'purple' },
-                { id: 'CS 3341', name: 'Probability & Statistics', term: 'Fall 2023', color: 'fuchsia' }
-              ].map(course => (
-                <li key={course.id} className="p-4 bg-white rounded-xl shadow-sm border border-slate-100 flex justify-between items-center hover:shadow-md transition-shadow group cursor-pointer hover:border-purple-200">
-                  <div className="flex flex-col">
-                    <span className={`font-black text-${course.color}-600 text-lg mb-1 group-hover:text-${course.color}-700 transition-colors`}>{course.id}</span>
-                    <span className="text-slate-600 font-medium">{course.name}</span>
+            {classes && classes.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {classes.map((cls, index) => (
+                  <div key={index} className="p-5 bg-gradient-to-br from-white to-slate-50 rounded-2xl border border-slate-100 flex flex-col justify-center hover:shadow-lg hover:border-blue-200 transition-all group cursor-default">
+                    <span className="text-blue-600 font-black text-xl mb-1 group-hover:scale-105 transition-transform origin-left">{cls}</span>
+                    <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Current Class</span>
                   </div>
-                  <span className="text-xs px-3 py-1 font-bold bg-slate-100 text-slate-600 rounded-full shadow-inner">{course.term}</span>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                <p className="text-slate-500 font-medium">No classes added yet.</p>
+                <Button variant="ghost" className="mt-2 text-blue-600 text-sm font-bold" onClick={() => navigate('/forum')}>Explore Forum</Button>
+              </div>
+            )}
+            <div className="mt-8 pt-6 border-t border-slate-100">
+               <p className="text-xs text-slate-400 font-medium flex items-center gap-1.5 justify-center italic">
+                 Academic records managed via PAL profile service
+               </p>
+            </div>
           </CardBody>
         </Card>
       </div>

@@ -1,27 +1,28 @@
 import { useCallback } from 'react';
-import { useApiCall } from './useApiCall';
 
-const fetchItemsApi = async <T>(_collection: string): Promise<T[]> => {
-  return new Promise((resolve) => setTimeout(() => resolve([]), 500));
-};
+const baseURL = import.meta.env.VITE_MONGODB_BASE_URL;
 
-const createItemApi = async <T>(_collection: string, payload: any): Promise<T> => {
-  return new Promise((resolve) => setTimeout(() => resolve(payload as T), 500));
-};
+export const useGET = useCallback(async <T>(collection: string): Promise<T[]> => {
+  const res = await fetch(`${baseURL}/api/${collection}`);
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.error || `Failed to fetch from ${collection}`);
+  }
+  return res.json();
+}, [baseURL]);
 
-export function useDatabase<T>(collection: string) {
-  const fetchApi = useApiCall(() => fetchItemsApi<T>(collection));
-  const createApi = useApiCall((payload: any) => createItemApi<T>(collection, payload));
-
-  const fetchItems = useCallback(() => fetchApi.execute(), [fetchApi]);
-  const createItem = useCallback((payload: any) => createApi.execute(payload), [createApi]);
-
-  return {
-    items: fetchApi.data,
-    isLoading: fetchApi.isLoading || createApi.isLoading,
-    error: fetchApi.error || createApi.error,
-    fetchItems,
-    createItem,
-    // extend with update/delete
-  };
-}
+export const useFetch = useCallback(async <T>(collection: string, payload: any): Promise<T> => {
+  const res = await fetch(`${baseURL}/api/${collection}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload)
+  });
+  
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.error || `Failed to create item in ${collection}`);
+  }
+  return res.json();
+}, [baseURL]);

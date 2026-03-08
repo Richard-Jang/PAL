@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom';
 import { Card, CardBody } from '../util/components/Card';
 
 export function Component() {
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 relative overflow-hidden">
+    <div className="flex flex-col items-center justify-center h-full p-4 relative overflow-hidden">
       {/* Decorative background gradients */}
       <div className="absolute top-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-br from-purple-200/40 to-fuchsia-200/40 blur-3xl mix-blend-multiply" />
