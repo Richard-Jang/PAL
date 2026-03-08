@@ -10,6 +10,9 @@ export function Component() {
         if (!user) {
             navigate("/login");
             return;
+        } else {
+            navigate("/");
+            return;
         }
     }, [user]);
 

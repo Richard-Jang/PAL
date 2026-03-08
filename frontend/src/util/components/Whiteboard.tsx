@@ -19,7 +19,7 @@ export const Whiteboard: React.FC = () => {
     if (ctx) {
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = '#ffffff'; // White ink on dark background
+      ctx.strokeStyle = '#6366f1'; // Indigo/blue ink on light background
       ctx.lineWidth = 3;
     }
   }, []);
@@ -50,7 +50,7 @@ export const Whiteboard: React.FC = () => {
       ctx.lineWidth = 20;
     } else {
       ctx.globalCompositeOperation = 'source-over';
-      ctx.strokeStyle = '#ffffff';
+      ctx.strokeStyle = '#6366f1'; // consistent color
       ctx.lineWidth = 3;
     }
 
@@ -103,7 +103,7 @@ export const Whiteboard: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="flex items-center justify-between bg-slate-900 border border-slate-800 p-3 rounded-lg overflow-x-auto">
+      <div className="flex items-center justify-between bg-white border border-slate-200 p-3 rounded-lg overflow-x-auto shadow-sm">
         <div className="flex gap-2">
           <Button 
             variant={mode === 'draw' ? 'primary' : 'secondary'} 
@@ -129,7 +129,7 @@ export const Whiteboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="border border-slate-800 rounded-lg overflow-hidden bg-slate-900 shadow-inner relative">
+      <div className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-inner relative ring-1 ring-purple-100">
         <canvas
           ref={canvasRef}
           onMouseDown={startDrawing}
@@ -139,7 +139,7 @@ export const Whiteboard: React.FC = () => {
           onTouchStart={startDrawing}
           onTouchMove={draw}
           onTouchEnd={stopDrawing}
-          className="w-full touch-none cursor-crosshair"
+          className="w-full touch-none cursor-crosshair bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:20px_20px]"
           style={{ height: '500px' }}
         />
       </div>

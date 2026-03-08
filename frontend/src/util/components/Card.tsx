@@ -14,12 +14,12 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <motion.div
-      whileHover={hoverable ? { y: -4, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)' } : {}}
-      className={`bg-slate-900 border border-slate-800 rounded-2xl shadow-lg p-6 overflow-hidden relative ${className}`}
+      whileHover={hoverable ? { y: -4, boxShadow: '0 10px 25px -5px rgba(168, 85, 247, 0.15)' } : {}}
+      className={`bg-slate-50 border border-slate-200 rounded-2xl shadow-sm p-6 overflow-hidden relative ${className}`}
       {...props}
     >
       {/* Subtle modern top lighting gradient effect */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-purple-500 to-magenta-500 opacity-20" />
       {children}
     </motion.div>
   );
@@ -31,13 +31,13 @@ export const CardHeader = ({ children, className = '' }: { children: React.React
 );
 
 export const CardTitle = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <h3 className={`text-xl font-bold text-slate-50 ${className}`}>{children}</h3>
+  <h3 className={`text-xl font-bold text-slate-800 ${className}`}>{children}</h3>
 );
 
 export const CardBody = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`text-slate-300 ${className}`}>{children}</div>
+  <div className={`text-slate-600 ${className}`}>{children}</div>
 );
 
 export const CardFooter = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`mt-6 pt-4 border-t border-slate-800 flex items-center justify-between ${className}`}>{children}</div>
+  <div className={`mt-6 pt-4 border-t border-slate-100 flex items-center justify-between ${className}`}>{children}</div>
 );

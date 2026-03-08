@@ -2,4 +2,5 @@
 
 body {
   @apply bg-zinc-950 text-slate-50 font-sans;
+  background-color: #ffffff;
 }
